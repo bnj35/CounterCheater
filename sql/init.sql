@@ -1,6 +1,6 @@
 -- Create users table
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) NOT NULL UNIQUE,
     username VARCHAR(100) NOT NULL UNIQUE,
     steam_profile_url VARCHAR(255),
@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 -- Create cheaters table
 CREATE TABLE cheaters (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     steam_profile_url VARCHAR(255) NOT NULL,
     video_url VARCHAR(255),
     complaint_count INTEGER DEFAULT 0,
