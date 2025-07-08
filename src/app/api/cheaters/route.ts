@@ -4,14 +4,24 @@ import { prisma } from '@/lib/prisma';
 export async function GET() {
   try {
     const cheaters = await prisma.cheater.findMany({
+      include: {
+        complaints: {
+          include: {
+            user: {
+              select: {
+                username: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: {
         complaintCount: 'desc',
       },
     });
     return NextResponse.json(cheaters);
-    
   } catch (error) {
-    console.error('Error reporting cheater:', error);
+    console.error('Error fetching cheaters:', error);
     return NextResponse.json(
       { error: 'Failed to fetch cheaters' },
       { status: 500 }
@@ -21,20 +31,19 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { steamProfileUrl, videoUrl } = await request.json();
+    const { steamProfileUrl } = await request.json();
     
     const cheater = await prisma.cheater.create({
       data: {
         steamProfileUrl,
-        videoUrl,
       },
     });
     
     return NextResponse.json(cheater, { status: 201 });
   } catch (error) {
-    console.error('Error reporting cheater:', error);
+    console.error('Error creating cheater:', error);
     return NextResponse.json(
-      { error: 'Failed to report cheater' },
+      { error: 'Failed to create cheater' },
       { status: 500 }
     );
   }
