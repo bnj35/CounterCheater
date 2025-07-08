@@ -1,16 +1,13 @@
+// filepath: src/app/api/users/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { Pool } from 'pg';
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
-    const result = await pool.query('SELECT * FROM users');
-    return NextResponse.json(result.rows);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const users = await prisma.user.findMany();
+    return NextResponse.json(users);
   } catch (error) {
+    console.error('Error reporting cheater:', error);
     return NextResponse.json(
       { error: 'Failed to fetch users' },
       { status: 500 }
@@ -20,16 +17,19 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, username, steam_profile_url } = await request.json();
+    const { email, username, steamProfileUrl } = await request.json();
     
-    const result = await pool.query(
-      'INSERT INTO users (email, username, steam_profile_url) VALUES ($1, $2, $3) RETURNING *',
-      [email, username, steam_profile_url]
-    );
+    const user = await prisma.user.create({
+      data: {
+        email,
+        username,
+        steamProfileUrl,
+      },
+    });
     
-    return NextResponse.json(result.rows[0], { status: 201 });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return NextResponse.json(user, { status: 201 });
   } catch (error) {
+    console.error('Error reporting cheater:', error);
     return NextResponse.json(
       { error: 'Failed to create user' },
       { status: 500 }

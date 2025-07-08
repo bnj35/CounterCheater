@@ -1,18 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Pool } from 'pg';
+import { prisma } from '@/lib/prisma';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-
-//récupère les tricheurs
 export async function GET() {
   try {
-    const result = await pool.query('SELECT * FROM cheaters ORDER BY complaint_count DESC');
-    return NextResponse.json(result.rows);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const cheaters = await prisma.cheater.findMany({
+      orderBy: {
+        complaintCount: 'desc',
+      },
+    });
+    return NextResponse.json(cheaters);
+    
   } catch (error) {
+    console.error('Error reporting cheater:', error);
     return NextResponse.json(
       { error: 'Failed to fetch cheaters' },
       { status: 500 }
@@ -20,19 +19,20 @@ export async function GET() {
   }
 }
 
-// Ajoute un tricheur
 export async function POST(request: NextRequest) {
   try {
-    const { steam_profile_url, video_url } = await request.json();
+    const { steamProfileUrl, videoUrl } = await request.json();
     
-    const result = await pool.query(
-      'INSERT INTO cheaters (steam_profile_url, video_url) VALUES ($1, $2) RETURNING *',
-      [steam_profile_url, video_url]
-    );
+    const cheater = await prisma.cheater.create({
+      data: {
+        steamProfileUrl,
+        videoUrl,
+      },
+    });
     
-    return NextResponse.json(result.rows[0], { status: 201 });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return NextResponse.json(cheater, { status: 201 });
   } catch (error) {
+    console.error('Error reporting cheater:', error);
     return NextResponse.json(
       { error: 'Failed to report cheater' },
       { status: 500 }
