@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id                 String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id                 String      @id @default(cuid())
   email              String      @unique @db.VarChar(255)
   username           String      @unique @db.VarChar(100)
   steamProfileUrl    String?     @map("steam_profile_url") @db.VarChar(255)
@@ -16,13 +17,21 @@ model User {
   role               String?     @default("user") @db.VarChar(50)
   complaints         Complaint[]
 
+  name          String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+
   @@index([email], map: "idx_users_email")
   @@index([username], map: "idx_users_username")
   @@map("users")
 }
 
 model Cheater {
-  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id              String      @id @default(cuid())
   steamProfileUrl String      @map("steam_profile_url") @db.VarChar(255)
   complaintCount  Int?        @default(0) @map("complaint_count")
   status          String?     @default("pending") @db.VarChar(50)
@@ -34,17 +43,61 @@ model Cheater {
 }
 
 model Complaint {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId      String   @map("user_id") @db.Uuid
-  cheaterId   String?  @map("cheater_id") @db.Uuid
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  cheaterId   String?  @map("cheater_id")
   videoUrl    String   @map("video_url") @db.VarChar(255)
   description String   @db.Text
   createdAt   DateTime @default(now()) @map("created_at")
-  
-  user    User     @relation(fields: [userId], references: [id])
-  cheater Cheater? @relation(fields: [cheaterId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
+  cheater     Cheater? @relation(fields: [cheaterId], references: [id])
 
   @@index([userId], map: "idx_complaints_user_id")
   @@index([cheaterId], map: "idx_complaints_cheater_id")
   @@map("complaints")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }
