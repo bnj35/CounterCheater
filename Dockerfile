@@ -17,12 +17,16 @@ COPY --from=deps /app/node_modules ./node_modules
 RUN npm run build
 
 # Development image - copy all source files
+# Development image - copy all source files
 FROM node:20-alpine AS dev
 WORKDIR /app
 ENV NODE_ENV=development
 
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
+
+# Generate Prisma client
+RUN npx prisma generate
 
 EXPOSE 3000
 
