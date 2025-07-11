@@ -1,31 +1,23 @@
+import "@/app/styles/globals.css";
+import {Providers} from "@/app/provider";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./scss/main.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: "CounterCheater",
-  description: "Signaler et combattre les tricheurs dans Counter-Strike",
+  title: "Counter Cheater",
+  description: "Report and track Counter-Strike cheaters",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="fr">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+    <html lang="en">
+      <body>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

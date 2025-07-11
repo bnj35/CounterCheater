@@ -1,61 +1,70 @@
-import Image from "next/image";
-import styles from "./scss/page.module.css";
-import { SteamLoginButton } from "@/components/SteamLoginButton";
+import { Button} from "@heroui/react";
+import { Card, CardBody, CardHeader } from "@heroui/react";
+// import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-center mb-4">CounterCheater</h1>
-          <p className="text-center text-gray-600 mb-6">
-            Signaler et combattre les tricheurs dans Counter-Strike
+    <div>
+      <main className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Counter Cheater
+          </h1>
+          <p className="text-xl text-gray-300 mb-8">
+            Report and track Counter-Strike cheaters to keep the game fair
           </p>
-          <div className="flex justify-center">
-            <SteamLoginButton />
-          </div>
         </div>
 
-        <ol>
-          <li>
-            Get started by signing in with Steam to report cheaters.
-          </li>
-          <li>Help create a better gaming experience for everyone.</li>
-        </ol>
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <Card className="bg-gray-800/50 backdrop-blur-sm">
+            <CardHeader className="pb-2">
+              <h3 className="text-xl font-semibold text-blue-400">Report Cheaters</h3>
+            </CardHeader>
+            <CardBody>
+              <p className="text-gray-300">
+                Submit evidence of cheating behavior with video proof and detailed descriptions.
+              </p>
+            </CardBody>
+          </Card>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://github.com/CounterCheater"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Card className="bg-gray-800/50 backdrop-blur-sm">
+            <CardHeader className="pb-2">
+              <h3 className="text-xl font-semibold text-purple-400">Track Status</h3>
+            </CardHeader>
+            <CardBody>
+              <p className="text-gray-300">
+                Monitor the status of reported cheaters and see community contributions.
+              </p>
+            </CardBody>
+          </Card>
+
+          <Card className="bg-gray-800/50 backdrop-blur-sm">
+            <CardHeader className="pb-2">
+              <h3 className="text-xl font-semibold text-green-400">Community</h3>
+            </CardHeader>
+            <CardBody>
+              <p className="text-gray-300">
+                Join the fight against cheaters and help maintain fair gameplay.
+              </p>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="text-center space-y-4">
+          <Button 
+            size="lg" 
+            color="primary" 
+            className="mr-4"
           >
-            <Image
-              className={styles.logo}
-              src="/github.svg"
-              alt="GitHub logo"
-              width={20}
-              height={20}
-            />
-            View on GitHub
-          </a>
-          <a
-            href="https://steamcommunity.com/dev/apikey"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
+            Report a Cheater
+          </Button>
+          <Button 
+            size="lg" 
+            variant="bordered" 
+            color="secondary"
           >
-            Get Steam API Key
-          </a>
+            View Reports
+          </Button>
         </div>
       </main>
     </div>
