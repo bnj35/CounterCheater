@@ -55,6 +55,8 @@ export default function Home() {
             size="lg" 
             color="primary" 
             className="mr-4"
+            as="a"
+            href="/report"
           >
             Report a Cheater
           </Button>
