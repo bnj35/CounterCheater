@@ -78,7 +78,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <Spinner size="lg" />
       </div>
     );
@@ -86,7 +86,7 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="min-h-screen p-6">
         <Card className="max-w-md mx-auto">
           <CardBody>
             <p className="text-red-600 text-center">Error: {error}</p>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen p-6">
         <h1 className="text-3xl font-bold mb-6 text-gray-900">
           Dashboard - Recent Complaints
         </h1>
