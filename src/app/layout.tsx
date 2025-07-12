@@ -2,6 +2,8 @@ import "@/app/styles/globals.css";
 import {Providers} from "@/app/provider";
 import { NavBar } from "@/components/NavBar";
 import type { Metadata } from "next";
+import Header from "./components/header";
+import Footer from "./components/footer";
 
 export const metadata: Metadata = {
   title: "Counter Cheater",
@@ -15,11 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="bg-background text-text antialiased min-h-full">
+        <Header />
         <Providers>
           <NavBar />
           <main>{children}</main>
         </Providers>
+        <Footer />
       </body>
     </html>
   );
