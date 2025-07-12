@@ -7,14 +7,9 @@ export default function Dashboard() {
   const router = useRouter();
   const { data: session } = authClient.useSession();
 
-  const handleSignOut = async () => {
-    await authClient.signOut();
-    router.push("/");
-  };
-
   if (!session) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center page-content">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Accès non autorisé</h1>
           <p className="mb-4">Vous devez être connecté pour accéder à cette page.</p>
@@ -30,7 +25,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 page-content">
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <h1 className="text-3xl font-bold text-gray-800 mb-4">Dashboard</h1>
@@ -52,15 +47,6 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
-          </div>
-
-          <div className="flex gap-4">
-            <button 
-              onClick={handleSignOut}
-              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition-colors"
-            >
-              Se déconnecter
-            </button>
           </div>
         </div>
       </div>

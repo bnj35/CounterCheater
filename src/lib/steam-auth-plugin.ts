@@ -2,8 +2,10 @@ import { createAuthEndpoint } from 'better-auth/api';
 import { type BetterAuthPlugin, type User } from 'better-auth';
 import { setSessionCookie } from 'better-auth/cookies';
 import { z } from 'zod';
+import { PrismaClient } from '@prisma/client';
 
 const STEAM_BASE_URL = 'https://api.steampowered.com/';
+const prisma = new PrismaClient();
 
 export interface SteamAuthPluginOptions {
   steamApiKey: string;
@@ -117,12 +119,50 @@ export const steamAuthPlugin = (
         
         if (!account) {
           console.log('No account found for Steam ID, creating new account');
-          user = await ctx.context.internalAdapter.createUser({
-            name: profile.personaname || 'Unknown',
-            email: `${steamid}@steam.placeholder.com`,
-            emailVerified: false,
-            image: profile.avatarfull || '',
+
+          // Generate a unique username to avoid conflicts
+          let username = profile.personaname || `steam_user_${steamid}`;
+          // Remove special characters and spaces from username
+          username = username.replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase();
+          // Ensure username is unique by appending steamid if needed
+          if (username.length > 90) {
+            username = username.substring(0, 90);
+          }
+          username = `${username}_${steamid.slice(-8)}`;
+
+          // Log all user innformation
+          console.log('🚀🚀🚀 Creating new user with profile:', {
+            profile: profileData.response.players[0],
+            username: username,
+            steamid: steamid,
+            profileUrl: profile.avatarfull,
           });
+
+
+          // Create user with Prisma directly to include custom fields
+          const newUser = await prisma.user.create({
+            data: {
+              name: profile.personaname || 'Unknown',
+              username: username,
+              email: `${steamid}@steam.placeholder.com`,
+              emailVerified: false,
+              image: profile.avatarfull || '',
+              steamProfileUrl: `https://steamcommunity.com/profiles/${steamid}`,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          });
+
+          // Convert to Better Auth User type
+          user = {
+            id: newUser.id,
+            name: newUser.name,
+            email: newUser.email,
+            emailVerified: newUser.emailVerified,
+            image: newUser.image,
+            createdAt: newUser.createdAt,
+            updatedAt: newUser.updatedAt,
+          };
           
           account = await ctx.context.internalAdapter.createAccount({
             accountId: steamid,
