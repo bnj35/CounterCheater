@@ -39,12 +39,16 @@ model Complaint {
   cheaterId   String?  @map("cheater_id") @db.Uuid
   videoUrl    String   @map("video_url") @db.VarChar(255)
   description String   @db.Text
+  status      String   @default("pending") @map("status") @db.VarChar(50)
+  priority    String   @default("medium") @map("priority") @db.VarChar(50)
   createdAt   DateTime @default(now()) @map("created_at")
   
   user    User     @relation(fields: [userId], references: [id])
   cheater Cheater? @relation(fields: [cheaterId], references: [id])
 
-  @@index([userId], map: "idx_complaints_user_id")
-  @@index([cheaterId], map: "idx_complaints_cheater_id")
-  @@map("complaints")
+    @@index([userId], map: "idx_complaints_user_id")
+    @@index([cheaterId], map: "idx_complaints_cheater_id")
+    @@index([status], map: "idx_complaints_status")
+    @@index([priority], map: "idx_complaints_priority")
+    @@map("complaints")
 }
