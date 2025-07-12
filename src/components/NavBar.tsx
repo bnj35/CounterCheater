@@ -1,11 +1,10 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
 import { Avatar, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
 import { SteamLoginButton } from "@/components/SteamLoginButton";
 import { useRouter } from "next/navigation";
-import { LayoutDashboard, BookText, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, BookText, LogOut } from "lucide-react";
 
 export const NavBar = () => {
   const router = useRouter();
@@ -16,12 +15,12 @@ export const NavBar = () => {
     router.push("/");
   };
 
-  const handleDashboard = () => {
-    router.push("/dashboard");
-  };
+  // const handleDashboard = () => {
+  //   router.push("/dashboard");
+  // };
 
   const handleProfile = () => {
-    router.push("/profile");
+    router.push("/profil");
   };
 
   const iconSize = 16;
@@ -32,34 +31,38 @@ export const NavBar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <button
-              onClick={() => router.push("/")}
-              className="flex items-center space-x-2 text-xl font-bold text-gray-800 hover:text-gray-600 transition-colors"
+            <Button
+              as="a"
+              href="/"
+              className="flex items-center space-x-2 text-xl font-bold text-gray-800 hover:text-gray-600 transition-colors bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"
             >
               <span>CounterCheater</span>
-            </button>
+            </Button>
           </div>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <button
-              onClick={() => router.push("/reports")}
-              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            <Button
+              as="a"
+              href="/dashboard"
+              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
               Signalements
-            </button>
-            <button
-              onClick={() => router.push("/statistics")}
-              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            </Button>
+            <Button
+              as="a"
+              href="/statistics"
+              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
               Statistiques
-            </button>
-            <button
-              onClick={() => router.push("/about")}
-              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            </Button>
+            <Button
+              as="a"
+              href="/about"
+              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
               À propos
-            </button>
+            </Button>
           </div>
 
           {/* User Section */}
@@ -80,7 +83,8 @@ export const NavBar = () => {
                 </DropdownTrigger>
                 <DropdownMenu aria-label="User menu">
                   <DropdownItem
-                    key="profile"
+                    key="profil"
+                    onPress={handleProfile}
                     className="h-14 gap-2"
                     textValue="Profile"
                   >
@@ -95,7 +99,7 @@ export const NavBar = () => {
                   </DropdownItem>
                   <DropdownItem
                     key="dashboard"
-                    onPress={handleDashboard}
+                    onPress={() => router.push("/dashboard")}
                     startContent={
                       <LayoutDashboard size={iconSize} />
                     }
@@ -111,7 +115,7 @@ export const NavBar = () => {
                   >
                     Mes signalements
                   </DropdownItem>
-                  <DropdownItem
+                  {/* <DropdownItem
                     key="settings"
                     onPress={() => router.push("/settings")}
                     startContent={
@@ -119,7 +123,7 @@ export const NavBar = () => {
                     }
                   >
                     Paramètres
-                  </DropdownItem>
+                  </DropdownItem> */}
                   <DropdownItem
                     key="logout"
                     className="text-danger"

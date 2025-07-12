@@ -18,7 +18,7 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "cheaters" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "steam_profile_url" VARCHAR(255) NOT NULL,
     "complaint_count" INTEGER DEFAULT 0,
     "status" VARCHAR(50) DEFAULT 'pending',
@@ -30,9 +30,11 @@ CREATE TABLE "cheaters" (
 CREATE TABLE "complaints" (
     "id" TEXT NOT NULL,
     "user_id" TEXT NOT NULL,
-    "cheater_id" TEXT,
+    "cheater_id" UUID,
     "video_url" VARCHAR(255) NOT NULL,
     "description" TEXT NOT NULL,
+    "status" VARCHAR(50) NOT NULL DEFAULT 'pending',
+    "priority" VARCHAR(50) NOT NULL DEFAULT 'medium',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "complaints_pkey" PRIMARY KEY ("id")
@@ -96,6 +98,9 @@ CREATE INDEX "idx_users_email" ON "users"("email");
 CREATE INDEX "idx_users_username" ON "users"("username");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "cheaters_steam_profile_url_key" ON "cheaters"("steam_profile_url");
+
+-- CreateIndex
 CREATE INDEX "idx_cheaters_status" ON "cheaters"("status");
 
 -- CreateIndex
@@ -106,6 +111,12 @@ CREATE INDEX "idx_complaints_user_id" ON "complaints"("user_id");
 
 -- CreateIndex
 CREATE INDEX "idx_complaints_cheater_id" ON "complaints"("cheater_id");
+
+-- CreateIndex
+CREATE INDEX "idx_complaints_status" ON "complaints"("status");
+
+-- CreateIndex
+CREATE INDEX "idx_complaints_priority" ON "complaints"("priority");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "session_token_key" ON "session"("token");
