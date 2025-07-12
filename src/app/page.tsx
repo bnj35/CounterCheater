@@ -5,7 +5,7 @@ import { Card, CardBody, CardHeader } from "@heroui/react";
 export default function Home() {
   return (
     <div>
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-12 ">
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
             Counter Cheater

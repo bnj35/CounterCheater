@@ -23,7 +23,7 @@ model User {
 
 model Cheater {
   id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  steamProfileUrl String      @map("steam_profile_url") @db.VarChar(255)
+  steamProfileUrl String      @unique @map("steam_profile_url") @db.VarChar(255)
   complaintCount  Int?        @default(0) @map("complaint_count")
   status          String?     @default("pending") @db.VarChar(50)
   complaints      Complaint[]

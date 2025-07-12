@@ -54,14 +54,43 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, cheaterId, videoUrl, description } = await request.json();
-    
+    const { steamProfileUrl, videoUrl, description, priority } = await request.json();
+
+    if (!steamProfileUrl || !videoUrl || !description) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    // In a real app, you'd get the userId from the session.
+    // For now, we'll find the first user to act as the reporter.
+    const reporter = await prisma.user.findFirst();
+    if (!reporter) {
+      return NextResponse.json(
+        { error: 'No users found to assign the report to. Please create a user first.' },
+        { status: 500 }
+      );
+    }
+
+    // Find or create the cheater profile
+    let cheater = await prisma.cheater.findUnique({
+      where: { steamProfileUrl },
+    });
+
+    if (!cheater) {
+      cheater = await prisma.cheater.create({
+        data: { steamProfileUrl },
+      });
+    }
+
     const complaint = await prisma.complaint.create({
       data: {
-        userId,
-        cheaterId,
+        userId: reporter.id,
+        cheaterId: cheater.id,
         videoUrl,
         description,
+        priority: priority || 'medium',
       },
       include: {
         user: {
