@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global styles for the app */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure main content doesn't get hidden behind navbar */
+main {
+  min-height: calc(100vh - 64px); /* 64px is the navbar height */
+}
+
+/* Add some padding to page content */
+.page-content {
+  padding-top: 1rem;
+}
