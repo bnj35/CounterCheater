@@ -1,5 +1,6 @@
 import "@/app/styles/globals.css";
 import {Providers} from "@/app/provider";
+import { NavBar } from "@/components/NavBar";
 import type { Metadata } from "next";
 import Header from "./components/header";
 import Footer from "./components/footer";
@@ -19,7 +20,8 @@ export default function RootLayout({
       <body className="bg-background text-text antialiased min-h-full">
         <Header />
         <Providers>
-          {children}
+          <NavBar />
+          <main>{children}</main>
         </Providers>
         <Footer />
       </body>
