@@ -1,65 +1,28 @@
--- script pour tester les routes de l'API avec des données
+-- Clear existing data to prevent conflicts
+TRUNCATE TABLE "complaints", "cheaters", "users" RESTART IDENTITY CASCADE;
 
--- Insert test users
-INSERT INTO users (id, email, username, steam_profile_url, participation_count, role) VALUES
-('550e8400-e29b-41d4-a716-446655440001', 'admin@counter-cheater.com', 'AdminUser', 'https://steamcommunity.com/id/adminuser/', 15, 'admin'),
-('550e8400-e29b-41d4-a716-446655440002', 'john.doe@email.com', 'JohnDoe_CS', 'https://steamcommunity.com/id/johndoe/', 8, 'user'),
-('550e8400-e29b-41d4-a716-446655440003', 'alice.smith@email.com', 'AliceSmith', 'https://steamcommunity.com/id/alicesmith/', 12, 'user'),
-('550e8400-e29b-41d4-a716-446655440004', 'moderator@counter-cheater.com', 'ModeratorPro', 'https://steamcommunity.com/id/modpro/', 25, 'moderator'),
-('550e8400-e29b-41d4-a716-446655440005', 'reporter@email.com', 'ReporterGamer', 'https://steamcommunity.com/id/reporter/', 3, 'user');
+-- Insert test users based on the new schema
+INSERT INTO "users" (id, email, username, name, steam_profile_url, steam_id, participation_count, role, "emailVerified", image, "createdAt", "updatedAt") VALUES
+('clxoy85ex000010yohze975cd', 'admin@counter-cheater.com', 'AdminUser', 'Admin User', 'https://steamcommunity.com/id/adminuser/', '76561197960287930', 15, 'admin', true, 'https://i.pravatar.cc/150?u=admin', NOW() - INTERVAL '30 day', NOW() - INTERVAL '1 day'),
+('clxoy85ex000110yohqabc123', 'john.doe@email.com', 'JohnDoe_CS', 'John Doe', 'https://steamcommunity.com/id/johndoe/', '76561197960287931', 8, 'user', true, 'https://i.pravatar.cc/150?u=john', NOW() - INTERVAL '25 day', NOW() - INTERVAL '5 day'),
+('clxoy85ex000210yohtest456', 'alice.smith@email.com', 'AliceSmith', 'Alice Smith', 'https://steamcommunity.com/id/alicesmith/', '76561197960287932', 12, 'user', false, 'https://i.pravatar.cc/150?u=alice', NOW() - INTERVAL '20 day', NOW() - INTERVAL '2 day'),
+('clxoy85ex000310yohmod789', 'moderator@counter-cheater.com', 'ModeratorPro', 'Moderator Pro', 'https://steamcommunity.com/id/modpro/', '76561197960287933', 25, 'moderator', true, 'https://i.pravatar.cc/150?u=moderator', NOW() - INTERVAL '15 day', NOW() - INTERVAL '3 day'),
+('clxoy85ex000410yohrep101', 'reporter@email.com', 'ReporterGamer', 'Reporter Gamer', 'https://steamcommunity.com/id/reporter/', '76561197960287934', 3, 'user', true, 'https://i.pravatar.cc/150?u=reporter', NOW() - INTERVAL '10 day', NOW() - INTERVAL '4 day');
 
 -- Insert test cheaters
-INSERT INTO cheaters (id, steam_profile_url, complaint_count, status) VALUES
-('660e8400-e29b-41d4-a716-446655440001', 'https://steamcommunity.com/id/suspect_player1/', 5, 'confirmed'),
-('660e8400-e29b-41d4-a716-446655440002', 'https://steamcommunity.com/id/wallhacker_pro/', 8, 'confirmed'),
-('660e8400-e29b-41d4-a716-446655440003', 'https://steamcommunity.com/id/aimbotter123/', 3, 'pending'),
-('660e8400-e29b-41d4-a716-446655440004', 'https://steamcommunity.com/id/suspicious_guy/', 2, 'under_review'),
-('660e8400-e29b-41d4-a716-446655440005', 'https://steamcommunity.com/id/speedhacker/', 1, 'rejected');
+INSERT INTO "cheaters" (id, steam_profile_url, complaint_count, status) VALUES
+('8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c51', 'https://steamcommunity.com/id/suspect_player1/', 5, 'confirmed'),
+('8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c52', 'https://steamcommunity.com/id/wallhacker_pro/', 8, 'confirmed'),
+('8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c53', 'https://steamcommunity.com/id/aimbotter123/', 3, 'pending'),
+('8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c54', 'https://steamcommunity.com/id/suspicious_guy/', 2, 'under_review'),
+('8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c55', 'https://steamcommunity.com/id/speedhacker/', 1, 'rejected');
 
--- Insert test complaints
-INSERT INTO complaints (id, user_id, cheater_id, video_url, description, status, priority, created_at) VALUES
-('770e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence1', 'Clear wallhack usage on Dust2, tracks enemies through walls consistently.', 'resolved', 'high', '2024-01-15 10:30:00'),
-('770e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence2', 'Impossible flick shots and prefiring unknown positions.', 'resolved', 'medium', '2024-01-16 14:45:00'),
-('770e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence3', 'Aimbot detected - inhuman reaction times and perfect accuracy.', 'in-progress', 'high', '2024-01-17 09:15:00'),
-('770e8400-e29b-41d4-a716-446655440004', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence4', 'Spinbot and rage hacking in competitive match.', 'pending', 'high', '2024-01-18 16:20:00'),
-('770e8400-e29b-41d4-a716-446655440005', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence5', 'Speed hacking and bhop scripts, moving unrealistically fast.', 'pending', 'low', '2024-01-19 11:10:00'),
-('770e8400-e29b-41d4-a716-446655440006', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence6', 'Wallhack on Mirage, knows all player positions.', 'resolved', 'medium', '2024-02-01 12:00:00'),
-('770e8400-e29b-41d4-a716-446655440007', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence7', 'Triggerbot, fires instantly when an enemy is visible.', 'in-progress', 'high', '2024-02-02 18:30:00'),
-('770e8400-e29b-41d4-a716-446655440008', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence8', 'Suspicious pre-aiming through smoke.', 'pending', 'low', '2024-02-03 11:45:00'),
-('770e8400-e29b-41d4-a716-446655440009', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence9', 'Player seems to have no recoil on any weapon.', 'in-progress', 'medium', '2024-02-04 22:00:00'),
-('770e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence10', 'Blatant aimbotting, snapping to heads.', 'resolved', 'high', '2024-02-05 14:00:00'),
-('770e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence11', 'Using anti-flash hacks, never seems to be blind.', 'pending', 'medium', '2024-02-10 10:20:00'),
-('770e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence12', 'Rage hacking after losing the first few rounds.', 'in-progress', 'high', '2024-02-11 15:00:00'),
-('770e8400-e29b-41d4-a716-446655440013', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence13', 'Very suspicious movement and positioning.', 'resolved', 'low', '2024-02-12 19:10:00'),
-('770e8400-e29b-41d4-a716-446655440014', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence14', 'Bunny hop scripts, moving too fast.', 'pending', 'medium', '2024-02-13 08:00:00'),
-('770e8400-e29b-41d4-a716-446655440015', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence15', 'Wallhack and aim-assist on Inferno.', 'in-progress', 'high', '2024-02-14 17:45:00'),
-('770e8400-e29b-41d4-a716-446655440016', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence16', 'Shooting through smoke with perfect accuracy.', 'resolved', 'high', '2024-03-01 11:55:00'),
-('770e8400-e29b-41d4-a716-446655440017', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence17', 'Player is clearly tracing enemies through walls.', 'pending', 'medium', '2024-03-02 13:20:00'),
-('770e8400-e29b-41d4-a716-446655440018', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence18', 'Instant headshots the moment an enemy peeks.', 'in-progress', 'high', '2024-03-03 16:00:00'),
-('770e8400-e29b-41d4-a716-446655440019', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence19', 'Seems to have information about economy and rotations.', 'pending', 'low', '2024-03-04 10:00:00'),
-('770e8400-e29b-41d4-a716-446655440020', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence20', 'Obvious wallhack, no attempt to hide it.', 'resolved', 'medium', '2024-03-05 20:30:00'),
-('770e8400-e29b-41d4-a716-446655440021', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence21', 'Aimbot toggled on during crucial rounds.', 'in-progress', 'high', '2024-03-15 19:00:00'),
-('770e8400-e29b-41d4-a716-446655440022', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence22', 'Speed hacking across the map.', 'pending', 'high', '2024-03-16 18:15:00'),
-('770e8400-e29b-41d4-a716-446655440023', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence23', 'Suspiciously accurate when flashed.', 'resolved', 'medium', '2024-03-17 12:00:00'),
-('770e8400-e29b-41d4-a716-446655440024', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence24', 'No recoil script, laser-like accuracy.', 'in-progress', 'medium', '2024-03-18 14:30:00'),
-('770e8400-e29b-41d4-a716-446655440025', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence25', 'Wallhack, watching players through solid objects.', 'pending', 'high', '2024-03-19 11:00:00'),
-('770e8400-e29b-41d4-a716-446655440026', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence26', 'Perfect aim tracking through smoke grenades.', 'resolved', 'high', '2024-04-01 09:00:00'),
-('770e8400-e29b-41d4-a716-446655440027', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence27', 'Blatant spinbot, impossible to play against.', 'in-progress', 'high', '2024-04-02 10:15:00'),
-('770e8400-e29b-41d4-a716-446655440028', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence28', 'Unnatural crosshair placement, likely aim-assist.', 'pending', 'low', '2024-04-03 14:00:00'),
-('770e8400-e29b-41d4-a716-446655440029', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence29', 'Player is bhopping perfectly, likely scripted.', 'resolved', 'medium', '2024-04-04 18:45:00'),
-('770e8400-e29b-41d4-a716-446655440030', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence30', 'Wallhack and triggerbot combination.', 'in-progress', 'high', '2024-04-05 21:00:00'),
-('770e8400-e29b-41d4-a716-446655440031', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence31', 'Knows enemy locations without any intel.', 'pending', 'medium', '2024-04-15 10:00:00'),
-('770e8400-e29b-41d4-a716-446655440032', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence32', 'Aimbotting with an AWP, instant shots.', 'resolved', 'high', '2024-04-16 11:30:00'),
-('770e8400-e29b-41d4-a716-446655440033', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence33', 'Suspicious timing and peeks.', 'in-progress', 'low', '2024-04-17 16:20:00'),
-('770e8400-e29b-41d4-a716-446655440034', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence34', 'Player is using a skin changer, but also seems to have wallhacks.', 'pending', 'medium', '2024-04-18 18:00:00'),
-('770e8400-e29b-41d4-a716-446655440035', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence35', 'Rage hacking with scout, jumping headshots.', 'resolved', 'high', '2024-04-19 22:10:00'),
-('770e8400-e29b-41d4-a716-446655440036', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence36', 'Clear aimbot, crosshair locks onto heads.', 'in-progress', 'high', '2024-05-01 14:00:00'),
-('770e8400-e29b-41d4-a716-446655440037', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence37', 'Wallhack, pre-firing players holding unusual angles.', 'pending', 'medium', '2024-05-02 15:30:00'),
-('770e8400-e29b-41d4-a716-446655440038', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence38', 'Speed hacking, gets to bomb sites in seconds.', 'resolved', 'high', '2024-05-03 19:00:00'),
-('770e8400-e29b-41d4-a716-446655440039', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence39', 'No-recoil script is very obvious.', 'in-progress', 'medium', '2024-05-04 11:20:00'),
-('770e8400-e29b-41d4-a716-446655440040', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence40', 'Triggerbot, impossible to win a duel against.', 'pending', 'high', '2024-05-05 13:45:00'),
-('770e8400-e29b-41d4-a716-446655440041', '550e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440002', 'https://youtube.com/watch?v=evidence41', 'Wallhack on Nuke, knows player locations across floors.', 'resolved', 'high', '2024-05-20 17:00:00'),
-('770e8400-e29b-41d4-a716-446655440042', '550e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440003', 'https://youtube.com/watch?v=evidence42', 'Aimbot with Deagle, one-taps every round.', 'in-progress', 'high', '2024-05-21 18:30:00'),
-('770e8400-e29b-41d4-a716-446655440043', '550e8400-e29b-41d4-a716-446655440003', '660e8400-e29b-41d4-a716-446655440004', 'https://youtube.com/watch?v=evidence43', 'Subtle wallhack, but movement gives it away.', 'pending', 'low', '2024-05-22 12:15:00'),
-('770e8400-e29b-41d4-a716-446655440044', '550e8400-e29b-41d4-a716-446655440004', '660e8400-e29b-41d4-a716-446655440005', 'https://youtube.com/watch?v=evidence44', 'Anti-aim and spinbotting in casual mode.', 'resolved', 'medium', '2024-05-23 16:00:00'),
-('770e8400-e29b-41d4-a716-446655440045', '550e8400-e29b-41d4-a716-446655440005', '660e8400-e29b-41d4-a716-446655440001', 'https://youtube.com/watch?v=evidence45', 'Blatant wallhack and aimbot, no attempt to hide.', 'pending', 'high', '2024-05-24 10:00:00');
+-- Insert test complaints with correct foreign keys
+INSERT INTO "complaints" (id, user_id, cheater_id, video_url, description, status, priority, created_at) VALUES
+('comp001', 'clxoy85ex000110yohqabc123', '8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c51', 'https://youtube.com/watch?v=evidence1', 'Clear wallhack usage on Dust2.', 'resolved', 'high', NOW() - INTERVAL '20 day'),
+('comp002', 'clxoy85ex000210yohtest456', '8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c51', 'https://youtube.com/watch?v=evidence2', 'Impossible flick shots.', 'resolved', 'medium', NOW() - INTERVAL '19 day'),
+('comp003', 'clxoy85ex000410yohrep101', '8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c52', 'https://youtube.com/watch?v=evidence3', 'Aimbot detected.', 'in-progress', 'high', NOW() - INTERVAL '18 day'),
+('comp004', 'clxoy85ex000110yohqabc123', '8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c53', 'https://youtube.com/watch?v=evidence4', 'Spinbot and rage hacking.', 'pending', 'high', NOW() - INTERVAL '17 day'),
+('comp005', 'clxoy85ex000310yohmod789', '8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c54', 'https://youtube.com/watch?v=evidence5', 'Speed hacking and bhop scripts.', 'pending', 'low', NOW() - INTERVAL '16 day'),
+('comp006', 'clxoy85ex000010yohze975cd', '8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c55', 'https://youtube.com/watch?v=evidence6', 'Wallhack on Mirage.', 'resolved', 'medium', NOW() - INTERVAL '15 day'),
+('comp007', 'clxoy85ex000110yohqabc123', '8a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c52', 'https://youtube.com/watch?v=evidence7', 'Triggerbot, fires instantly.', 'in-progress', 'high', NOW() - INTERVAL '14 day');
