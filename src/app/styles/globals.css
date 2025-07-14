@@ -14,6 +14,10 @@ main {
   min-height: calc(100vh - 64px); /* 64px is the navbar height */
 }
 
+.full-height {
+  min-height: calc(100vh - 64px); 
+}
+
 /* Add some padding to page content */
 .page-content {
   padding-top: 1rem;

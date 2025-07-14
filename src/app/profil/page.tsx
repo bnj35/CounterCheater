@@ -34,7 +34,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-12v min-h-full">
+    <div className="container mx-auto max-w-4xl px-4 py-12 full-height">
       <Card className="bg-background-800/50 backdrop-blur-sm shadow-lg">
         <CardHeader className="flex flex-col sm:flex-row items-center gap-6 p-6">
           <Avatar 

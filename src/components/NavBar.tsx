@@ -26,7 +26,7 @@ export const NavBar = () => {
   const iconSize = 16;
 
   return (
-    <nav className="bg-white shadow-lg border-b">
+    <nav className="bg-background shadow-lg border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -34,7 +34,7 @@ export const NavBar = () => {
             <Button
               as="a"
               href="/"
-              className="flex items-center space-x-2 text-xl font-bold text-gray-800 hover:text-gray-600 transition-colors bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"
+              className="flex items-center space-x-2 text-xl font-bold text-text hover:text-text-600 transition-colors bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent"
             >
               <span>CounterCheater</span>
             </Button>
@@ -45,21 +45,21 @@ export const NavBar = () => {
             <Button
               as="a"
               href="/dashboard"
-              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
+              className="text-text-700 hover:text-text-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
               Signalements
             </Button>
             <Button
               as="a"
               href="/statistics"
-              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
+              className="text-text-700 hover:text-text-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
               Statistiques
             </Button>
             <Button
               as="a"
               href="/about"
-              className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
+              className="text-text-700 hover:text-text-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
               À propos
             </Button>
