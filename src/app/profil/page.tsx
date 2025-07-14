@@ -6,26 +6,64 @@ import { Avatar, Button, Card, CardBody, CardHeader, Spinner, Chip } from "@hero
 import { LogOut, Edit, Mail, BarChart2 } from "lucide-react";
 import Link from "next/link";
 import { SteamIcon } from "@/components/Icons/SteamIcon";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+type UserProfile = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  username?: string | null;
+  role?: string | null;
+  steamProfileUrl?: string | null;
+  participationCount?: number | null;
+};
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
-  const user = session?.user;
-  console.log("User data:", user);
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
+  const sessionUser = session?.user;
+  
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [isProfileLoading, setProfileLoading] = useState(true);
 
   useEffect(() => {
-    if (!isPending && !user) {
+    if (!isSessionPending && !sessionUser) {
       router.push('/');
     }
-  }, [isPending, user, router]);
+  }, [isSessionPending, sessionUser, router]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (sessionUser?.id) {
+        try {
+          setProfileLoading(true);
+          const response = await fetch(`/api/users/${sessionUser.id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setUser(data);
+          } else {
+            console.error("Failed to fetch user data");
+            setUser(null);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setUser(null);
+        } finally {
+          setProfileLoading(false);
+        }
+      }
+    };
+
+    fetchUser();
+  }, [sessionUser?.id]);
 
   const handleSignOut = async () => {
     await authClient.signOut();
     router.push("/");
   };
 
-  if (isPending || !user) {
+  if (isSessionPending || isProfileLoading) {
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-64px)]">
         <Spinner size="lg" />
@@ -33,8 +71,16 @@ export default function ProfilePage() {
     );
   }
 
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center min-h-[calc(100vh-64px)]">
+        <p>Could not load user profile.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-12v min-h-full">
+    <div className="container mx-auto max-w-4xl px-4 py-12 full-height">
       <Card className="bg-background-800/50 backdrop-blur-sm shadow-lg">
         <CardHeader className="flex flex-col sm:flex-row items-center gap-6 p-6">
           <Avatar 

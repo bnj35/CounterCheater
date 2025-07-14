@@ -1,6 +1,5 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { SteamIcon } from "@/components/Icons/SteamIcon";
 import { Button } from "@heroui/react";
@@ -37,14 +36,6 @@ export const SteamLoginButton = () => {
   };
 
   return (
-    // <button
-    //   onClick={handleSteamLogin}
-    //   disabled={isLoading}
-    //   className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded flex items-center gap-2 transition-colors disabled:opacity-50"
-    // >
-    //   <SteamIcon size={20} color="white" />
-    //   {isLoading ? "Connexion..." : "Se connecter avec Steam"}
-    // </button>
     <Button
       color="default"
       className="bg-black text-white"
