@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
   if (!input) return NextResponse.json({ error: "Missing input parameter" }, { status: 400 });
 
   const parsed = extractInput(input);
-  let steamId: string | null = parsed.type === "steamid" ? parsed.value : await resolveVanity(key, parsed.value);
+  const steamId: string | null = parsed.type === "steamid" ? parsed.value : await resolveVanity(key, parsed.value);
 
   if (!steamId) return NextResponse.json({ error: "Unable to resolve Steam ID" }, { status: 404 });
 
@@ -47,6 +47,7 @@ export async function GET(req: NextRequest) {
     const statsJson = await statsRes.json();
     const profileJson = await profileRes.json();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rawStats: any[] = statsJson?.playerstats?.stats || [];
     console.log("Raw stats:", rawStats);
     const mapped: Record<string, number> = {};

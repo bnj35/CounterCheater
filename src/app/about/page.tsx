@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 type SteamStats = {
   total_kills?: number;
@@ -14,6 +15,7 @@ type FetchState =
   | { status: "idle" }
   | { status: "loading" }
   | { status: "error"; message: string }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   | { status: "done"; player: any; stats: SteamStats };
 
 export default function AboutPage() {
@@ -32,6 +34,7 @@ export default function AboutPage() {
         return;
       }
       setData({ status: "done", player: json.player, stats: json.stats });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setData({ status: "error", message: "Network error" });
     }
@@ -86,10 +89,13 @@ export default function AboutPage() {
         <>
           <div className="flex gap-4 items-center">
             {player?.avatarfull && (
-              <img
+               <Image
                 src={player.avatarfull}
-                alt="Avatar"
+                alt={player?.personaname ? `${player.personaname}'s avatar` : "Avatar"}
+                width={96}
+                height={96}
                 className="w-24 h-24 rounded-lg shadow"
+                priority
               />
             )}
             <div>
@@ -134,6 +140,7 @@ export default function AboutPage() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function StatCard({ label, value, accent }: { label: string; value: any; accent?: boolean }) {
   return (
     <div
