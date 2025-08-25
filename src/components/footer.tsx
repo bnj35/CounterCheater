@@ -12,7 +12,7 @@ export default function Footer() {
             <Link href="/report" className="hover:text-text/80 text-sm transition-colors">
               report a Cheater
             </Link>
-            <Link href="/dashboard" className="hover:text-text/80 text-sm transition-colors">
+            <Link href="/video" className="hover:text-text/80 text-sm transition-colors">
               view Video Proof
             </Link>
           </div>

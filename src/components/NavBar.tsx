@@ -47,7 +47,7 @@ export const NavBar = () => {
               href="/dashboard"
               className="text-text-700 hover:text-text-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
-              Signalements
+              Dashboard
             </Button>
             <Button
               as="a"
@@ -58,10 +58,17 @@ export const NavBar = () => {
             </Button>
             <Button
               as="a"
-              href="/about"
+              href="/report"
               className="text-text-700 hover:text-text-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
             >
-              À propos
+              Report
+            </Button>
+            <Button
+              as="a"
+              href="/check"
+              className="text-text-700 hover:text-text-900 px-3 py-2 rounded-md text-sm font-medium transition-colors bg-background"
+            >
+              Check profile
             </Button>
           </div>
 
